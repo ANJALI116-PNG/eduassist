@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduAssist — Your AI Study Companion</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #f5f0e8;
+            --surface: #fffdf8;
+            --ink: #1a1208;
+            --muted: #7a6f5e;
+            --accent: #e8642a;
+            --accent2: #2a7de8;
+            --accent3: #2ab87a;
+            --border: #e0d8c8;
+            --card: #ffffff;
+        }
+
+        ``` *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 5%;
+            background: rgba(245, 240, 232, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--ink);
+        }
+
+        .nav-btn {
+            background: var(--ink);
+            color: var(--bg);
+            padding: 0.55rem 1.4rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: #f5c4a0;
+            top: -100px;
+            right: -100px;
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        .blob2 {
+            width: 400px;
+            height: 400px;
+            background: #a0c4f5;
+            bottom: -50px;
+            left: -80px;
+            animation: drift 10s ease-in-out infinite reverse;
+        }
+
+        .blob3 {
+            width: 300px;
+            height: 300px;
+            background: #a0f5c4;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: drift 12s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1)
+            }
+
+            50% {
+                transform: translateY(-30px) scale(1.05)
+            }
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 0.4rem 1.1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(3rem, 7vw, 6rem);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            max-width: 820px;
+            position: relative;
+            animation: fadeUp 0.8s 0.1s ease both;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            max-width: 520px;
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            color: var(--muted);
+            line-height: 1.7;
+            animation: fadeUp 0.9s 0.2s ease both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 1s 0.3s ease both;
+        }
+
+        .btn-fill {
+            background: var(--accent);
+            color: #fff;
+            padding: 0.85rem 2.2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(232, 100, 42, 0.3);
+        }
+
+        .btn-fill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232, 100, 42, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--border);
+            color: var(--ink);
+            padding: 0.85rem 2.2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--ink);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: var(--ink);
+            color: var(--bg);
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            padding: 2rem 5%;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(245, 240, 232, 0.6);
+            margin-top: 0.2rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 6rem 5%;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(232, 100, 42, 0.1);
+            color: var(--accent);
+            border-radius: 100px;
+            padding: 0.3rem 0.9rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            max-width: 600px;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 1rem;
+            max-width: 500px;
+            line-height: 1.7;
+            margin-top: 0.8rem;
+        }
+
+        /* FEATURES */
+        .features {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .features-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+            transform-origin: left;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feat-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .feat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feat-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .feat-desc {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* HOW IT WORKS */
+        .how-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .step-content p {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .how-visual {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .chat-msg {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+        }
+
+        .chat-msg.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar.ai {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .chat-avatar.user {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        .chat-bubble {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            max-width: 240px;
+        }
+
+        .chat-msg.user .chat-bubble {
+            background: var(--accent);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .chat-typing {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 0.75rem 1rem;
+        }
+
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--muted);
+            animation: bounce 1.2s ease infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0)
+            }
+
+            30% {
+                transform: translateY(-8px)
+            }
+        }
+
+        /* SUBJECTS */
+        .subjects {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        .subjects .section-title {
+            color: var(--bg);
+        }
+
+        .subjects .section-sub {
+            color: rgba(245, 240, 232, 0.55);
+        }
+
+        .subjects .section-tag {
+            background: rgba(232, 100, 42, 0.25);
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .subject-pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+            cursor: default;
+        }
+
+        .subject-pill:hover {
+            background: rgba(232, 100, 42, 0.15);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .subject-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subject-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: rgba(245, 240, 232, 0.8);
+        }
+
+        /* TESTIMONIALS */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .testi-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .testi-stars {
+            color: var(--accent);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .testi-text {
+            font-size: 0.92rem;
+            color: var(--muted);
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 1.2rem;
+        }
+
+        .testi-author {
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .testi-role {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* CTA */
+        .cta-section {
+            background: var(--accent);
+            color: #fff;
+            text-align: center;
+            padding: 6rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1), transparent 60%),
+                radial-gradient(circle at 70% 50%, rgba(0, 0, 0, 0.1), transparent 60%);
+        }
+
+        .cta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            max-width: 440px;
+            margin: 0 auto 2.5rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: #fff;
+            color: var(--accent);
+            padding: 0.95rem 2.5rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--ink);
+            color: rgba(245, 240, 232, 0.5);
+            padding: 3rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        footer .logo {
+            color: var(--bg);
+            font-size: 1.2rem;
+        }
+
+        footer p {
+            font-size: 0.82rem;
+        }
+
+        /* CHATBASE WIDGET PLACEHOLDER */
+        /* The Chatbase script tag below will inject the chat bubble automatically */
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.9rem 4%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .how-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 4rem 5%;
+            }
+
+            .stats-bar {
+                gap: 2rem;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        ```
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+
+    <nav>
+        <a href="#" class="logo">Edu<span>Assist</span></a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How it Works</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+        </ul>
+        <a href="#chat" class="nav-btn">Ask AI Now</a>
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="hero">
+        <div class="hero-blob blob1"></div>
+        <div class="hero-blob blob2"></div>
+        <div class="hero-blob blob3"></div>
+
+        <div class="hero-tag">✦ AI-Powered Learning</div>
+
+        <h1>Study smarter,<br />not <em>harder</em></h1>
+
+        <p class="hero-sub">
+            EduAssist is your 24/7 AI study companion. Get instant answers, concept explanations, and personalised help
+            across every subject — anytime, anywhere.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#chat" class="btn-fill">Start Chatting Free →</a>
+            <a href="#how" class="btn-outline">See How it Works</a>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-num">50K+</div>
+            <div class="stat-label">Students Helped</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">200+</div>
+            <div class="stat-label">Topics Covered</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Always Available</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">4.9★</div>
+            <div class="stat-label">Student Rating</div>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+
+    <section class="features" id="features">
+        <div class="features-header">
+            <div>
+                <div class="section-tag">Features</div>
+                <h2 class="section-title">Everything a student needs</h2>
+                <p class="section-sub">From quick homework help to deep concept explanations — EduAssist has you
+                    covered.</p>
+            </div>
+        </div>
+        <div class="features-grid">
+            <div class="feat-card">
+                <div class="feat-icon">🤖</div>
+                <div class="feat-title">AI Chatbot Assistant</div>
+                <p class="feat-desc">Ask anything — the AI chatbot answers instantly in plain language, breaking down
+                    complex topics into simple explanations you can actually understand.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📚</div>
+                <div class="feat-title">Multi-Subject Support</div>
+                <p class="feat-desc">Whether it's Maths, Physics, Chemistry, History, or Computer Science — EduAssist
+                    covers over 200 topics across all major subjects.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⚡</div>
+                <div class="feat-title">Instant Answers</div>
+                <p class="feat-desc">No more waiting hours for a teacher's reply. Get accurate, detailed answers in
+                    seconds — perfect for late-night study sessions and exam prep.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🎯</div>
+                <div class="feat-title">Exam Preparation</div>
+                <p class="feat-desc">Ask for practice questions, revision summaries, and key points on any topic. The AI
+                    helps you focus on what matters most for your exams.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🌐</div>
+                <div class="feat-title">Available 24/7</div>
+                <p class="feat-desc">Study on your schedule. EduAssist is always online — at midnight before exams, on
+                    weekends, or during holidays when teachers aren't available.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">💬</div>
+                <div class="feat-title">Conversational Learning</div>
+                <p class="feat-desc">Ask follow-up questions naturally. The AI understands context, so you can have a
+                    real conversation instead of just searching and scrolling.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+
+    <section id="how">
+        <div class="section-tag">How it Works</div>
+        <div class="how-grid">
+            <div>
+                <h2 class="section-title">Three steps to better grades</h2>
+                <p class="section-sub">EduAssist is designed to be effortless — just type your question and let the AI
+                    do the rest.</p>
+                <div class="steps" style="margin-top:2.5rem;">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h4>Type your question</h4>
+                            <p>Ask anything — a homework problem, a concept you don't understand, or a topic you want
+                                summarised.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h4>Get an instant AI answer</h4>
+                            <p>The Chatbase-powered AI processes your question and delivers a clear, accurate,
+                                student-friendly answer within seconds.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h4>Keep the conversation going</h4>
+                            <p>Ask follow-ups, request examples, or go deeper. The AI remembers context so you can learn
+                                naturally.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="how-visual" id="chat">
+                <div
+                    style="font-size:0.75rem;font-weight:600;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.5rem;">
+                    EduAssist Chat</div>
+                <div class="chat-msg">
+                    <div class="chat-avatar ai">EA</div>
+                    <div class="chat-bubble">Hi! I'm EduAssist 👋 Ask me anything about your studies — I'm here to help!
+                    </div>
+                </div>
+                <div class="chat-msg user">
+                    <div class="chat-avatar user">You</div>
+                    <div class="chat-bubble">Can you explain Newton's Second Law?</div>
+                </div>
+                <div class="chat-msg">
+                    <div class="chat-avatar ai">EA</div>
+                    <div class="chat-bubble">Of course! Newton's Second Law states that Force = Mass × Acceleration
+                        (F=ma). The greater the mass of an object, the more force needed to accelerate it. Want an
+                        example?</div>
+                </div>
+                <div class="chat-msg user">
+                    <div class="chat-avatar user">You</div>
+                    <div class="chat-bubble">Yes please!</div>
+                </div>
+                <div class="chat-msg">
+                    <div class="chat-avatar ai">EA</div>
+                    <div class="chat-bubble">
+                        <div class="chat-typing">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:0.5rem;">
+                    <a href="#" class="btn-fill" style="font-size:0.85rem;padding:0.65rem 1.5rem;">Open Full Chat →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUBJECTS -->
+
+    <section class="subjects" id="subjects">
+        <div class="section-tag">Subjects</div>
+        <h2 class="section-title">Covers everything you study</h2>
+        <p class="section-sub">From STEM to humanities — EduAssist supports every subject in your curriculum.</p>
+        <div class="subjects-grid">
+            <div class="subject-pill">
+                <div class="subject-emoji">🔢</div>
+                <div class="subject-name">Mathematics</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">⚗️</div>
+                <div class="subject-name">Chemistry</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">⚡</div>
+                <div class="subject-name">Physics</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">🧬</div>
+                <div class="subject-name">Biology</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">💻</div>
+                <div class="subject-name">Computer Sci.</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">📖</div>
+                <div class="subject-name">English</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">🌍</div>
+                <div class="subject-name">Geography</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">🏛️</div>
+                <div class="subject-name">History</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">💰</div>
+                <div class="subject-name">Economics</div>
+            </div>
+            <div class="subject-pill">
+                <div class="subject-emoji">🧠</div>
+                <div class="subject-name">Psychology</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+
+    <section id="testimonials">
+        <div class="section-tag">Student Reviews</div>
+        <h2 class="section-title">Loved by students everywhere</h2>
+        <div class="testimonials-grid">
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"EduAssist explained integration to me better than any textbook ever did. I went
+                    from failing to scoring 87% in my maths exam!"</p>
+                <div class="testi-author">Priya S.</div>
+                <div class="testi-role">Engineering Student</div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"I use it every night before exams. The chatbot is patient, gives great examples,
+                    and never makes me feel dumb for asking basic questions."</p>
+                <div class="testi-author">Arjun M.</div>
+                <div class="testi-role">Class 12 Student</div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"Finally a study tool that actually converses with you! It helped me write a whole
+                    essay plan in 10 minutes when I was completely stuck."</p>
+                <div class="testi-author">Zara K.</div>
+                <div class="testi-role">Commerce Student</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+        <h2>Ready to study smarter?</h2>
+        <p>Join thousands of students already using EduAssist to ace their exams. It's free to start — no sign-up
+            needed.</p>
+        <a href="#chat" class="btn-white">Start Chatting Now →</a>
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+        <a href="#" class="logo">Edu<span style="color:var(--accent)">Assist</span></a>
+        <p>Built with Antigravity · Powered by Chatbase AI · Deployed on Vercel</p>
+        <p>© 2026 EduAssist. All rights reserved.</p>
+    </footer>
+
+    <!-- ============================================================
+     CHATBASE INTEGRATION
+     Replace 600tzFtccn3xQqPZ_LQCL below with your actual Chatbase chatbot ID
+     Get it from: https://www.chatbase.co → your chatbot → embed
+     ============================================================ -->
+
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "600tzFtccn3xQqPZ_LQCL",
+            domain: "www.chatbase.co"
+        }
+    </script>
+
+    <script src="https://www.chatbase.co/embed.min.js" chatbotId="600tzFtccn3xQqPZ_LQCL" domain="www.chatbase.co" defer>
+    </script>
+
+</body>
+
+</html>
